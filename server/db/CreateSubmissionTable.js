@@ -7,10 +7,12 @@ AWS.config.update({
   endpoint: "http://localhost:8000"
 });
 
+// create the DynamoDB service object
+// specified version is the  is the latest long-term support version, or LTS.
 const dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
 const params = {
-    TableName : "Thoughts",
+    TableName : "Submission",
     KeySchema: [       
         { AttributeName: "username", KeyType: "HASH"},  //Partition key
         { AttributeName: "createdAt", KeyType: "RANGE" }  //Sort key
@@ -19,6 +21,7 @@ const params = {
         { AttributeName: "username", AttributeType: "S" },
         { AttributeName: "createdAt", AttributeType: "N" }
     ],
+    // Limits on read write capacity - this is to do with pricing
     ProvisionedThroughput: {       
         ReadCapacityUnits: 10, 
         WriteCapacityUnits: 10
