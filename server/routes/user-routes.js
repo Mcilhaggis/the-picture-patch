@@ -7,8 +7,9 @@ const awsConfig = {
 
 };
 AWS.config.update(awsConfig);
+//DocumentClient class to use native JavaScript objects to interface with the dynamodb service object.
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const table = "Thoughts";
+const table = "Submission";
 
 // get all users' thoughts
 router.get('/users', (req, res) => {
@@ -24,23 +25,29 @@ router.get('/users', (req, res) => {
   });
 })
 
-// get thoughts from a user
+// get thoughts from a specific user
 router.get('/users/:username', (req, res) => {
   console.log(`Querying for thought(s) from ${req.params.username}.`);
   const params = {
     TableName: table,
+    //specifying the criteria to find the posts made by a user
+    //aliases that represent the attribute name and value
     KeyConditionExpression: "#un = :user",
     ExpressionAttributeNames: {
       "#un": "username",
       "#ca": "createdAt",
-      "#th": "thought"
+      "#su": "submission"
     },
     ExpressionAttributeValues: {
       ":user": req.params.username
     },
-    ProjectionExpression: "#th, #ca"
-  };
+    //Determining which columns will be returned 
+    ProjectionExpression: "#su, #ca",
+    //Setting most recent posts to be at the top 
+    ScanIndexForward: false
 
+  };
+//Now that params are set we can make the call
   dynamodb.query(params, (err, data) => {
     if (err) {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
@@ -54,14 +61,16 @@ router.get('/users/:username', (req, res) => {
 
 // Create new user
 router.post('/users', (req, res) => {
+  // Params equals what we get from the user when they submit the form 
   const params = {
     TableName: table,
     Item: {
       "username": req.body.username,
       "createdAt": Date.now(),
-      "thought": req.body.thought
+      "submission": req.body.submission
     }
   };
+  // Now that params are set we can send to the database with a put request 
   dynamodb.put(params, (err, data) => {
     if (err) {
       console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
