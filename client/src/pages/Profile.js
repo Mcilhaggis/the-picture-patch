@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import ThoughtForm from '../components/ThoughtForm';
-import ThoughtList from '../components/ThoughtList';
+import SubmissionForm from '../components/SubmissionForm';
+import SubmissionList from '../components/SubmissionList';
 
 const AWS = require("aws-sdk");
 const awsConfig = {
@@ -15,10 +15,10 @@ AWS.config.update(awsConfig);
 const Profile = props => {
   const { username: userParam } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [thoughts, setThoughts] = useState([{
+  const [submissions, setSubmissions] = useState([{
     username: userParam,
     createdAt: '', 
-    thought: ''
+    submission: ''
   }]);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Profile = props => {
       // sort the array by createdAt property ordered by descending values
       // const orderData = data.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
       console.log(data);
-      setThoughts(data);
+      setSubmissions(data);
       setIsLoaded(true);
     }
     fetchData();
@@ -47,11 +47,11 @@ const Profile = props => {
         {!isLoaded ? (
             <div>Loading...</div>
           ) : (
-          <ThoughtList thoughts={thoughts} title={`${userParam}'s thoughts...`} />
+          <SubmissionList submissions={submissions} title={`${userParam}'s submissions...`} />
           )}
         </div>
       </div>
-      <div className="mb-3"> <ThoughtForm name={userParam} /></div>
+      <div className="mb-3"> <SubmissionForm name={userParam} /></div>
     </div>
   );
 };

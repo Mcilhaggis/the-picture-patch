@@ -4,7 +4,6 @@ const fs = require('fs');
 //  aws-sdk to create the interface with DynamoDB
 AWS.config.update({
   region: "us-east-2",
-  endpoint: "http://localhost:8000"
 });
 // Documentclient() class offers a level of abstraction that enables us to use JavaScript objects as arguments and return native JavaScript types
 const dynamodb = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});

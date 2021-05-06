@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const ThoughtForm = () => {
-  const [formState, setFormState] = useState({ username: '', thought: '' });
+const SubmisisonForm = () => {
+  const [formState, setFormState] = useState({ username: '', submission: '' });
   const [characterCount, setCharacterCount] = useState(0);
 
   // update state based on form input changes
@@ -30,7 +30,7 @@ const ThoughtForm = () => {
     }
     postData();
     // clear form value
-    setFormState({ username: '', thought: '' });
+    setFormState({ username: '', submission: '' });
     setCharacterCount(0);
   };
 
@@ -53,8 +53,8 @@ const ThoughtForm = () => {
         ></input>
         <textarea
           placeholder="Here's a new thought..."
-          name="thought"
-          value={formState.thought}
+          name="submission"
+          value={formState.submission}
           className="form-input col-12 col-md-9"
           onChange={handleChange}
         ></textarea>
@@ -66,4 +66,4 @@ const ThoughtForm = () => {
   );
 };
 
-export default ThoughtForm;
+export default SubmisisonForm;
